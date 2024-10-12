@@ -13,7 +13,7 @@ services:
     expose:
       - "9000"
     volumes:
-      - ./src/App:/var/www/html
+      - ./src:/var/www/html
     networks:
       - mynetwork
     depends_on:
