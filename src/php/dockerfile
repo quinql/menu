@@ -1,0 +1,32 @@
+# base image
+FROM php:8.2-fpm
+
+# update and install php extension
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    zip unzip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd mysqli
+
+# download CodeIgniter 
+WORKDIR /var/www/html
+RUN curl -L -o codeigniter.zip https://github.com/bcit-ci/CodeIgniter/archive/3.1.11.zip \
+    && unzip codeigniter.zip \
+    && mv CodeIgniter-3.1.11/* ./ \
+    && rm -rf CodeIgniter-3.1.11 codeigniter.zip
+
+# copy to CodeIgniter
+COPY ./App/Controllers /var/www/html/application/controllers/
+COPY ./App/Models /var/www/html/application/models/
+COPY ./App/Views /var/www/html/application/views/
+COPY ./App/Routes.php /var/www/html/application/config/routes.php
+
+RUN chown -R www-data:www-data /var/www/html
+
+#port
+EXPOSE 9000
+
+# start PHP-FPM
+CMD ["php-fpm"]

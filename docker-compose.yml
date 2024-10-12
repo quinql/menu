@@ -1,0 +1,66 @@
+version: '3.3'
+
+networks:
+  mynetwork:
+    driver: bridge
+
+services:
+  # PHP-FPM 
+  php:
+    build:
+      context: ./src/php/
+    container_name: php
+    expose:
+      - "9000"
+    volumes:
+      - ./src/App:/var/www/html
+    networks:
+      - mynetwork
+    depends_on:
+      - mysql
+
+  # MySQL
+  mysql:
+    image: mysql:latest
+    container_name: sql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: MenuScanOrder
+      MYSQL_USER: php
+      MYSQL_PASSWORD: php
+    volumes:
+      - ./src/App/sql:/docker-entrypoint-initdb.d 
+      - mysql-data:/var/lib/mysql
+    networks:
+      - mynetwork
+
+  # Nginx 
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src/php/nginx.conf:/etc/nginx/nginx.conf
+      - ./src/App:/var/www/html
+    depends_on:
+      - php
+    networks:
+      - mynetwork
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: myadmin
+    environment:
+      PMA_HOST: mysql 
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8082:80"
+    depends_on:
+      - mysql
+    networks:
+      - mynetwork
+
+volumes:
+  mysql-data:
