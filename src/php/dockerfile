@@ -1,17 +1,7 @@
-# base image
 FROM php:8.2-fpm
 
-# update and install mysqli extension
-RUN apt-get update && apt-get install -y \
-    && docker-php-ext-install -j$(nproc) mysqli
-
-# install igbinary and Redis extension
-RUN pecl install igbinary redis \
-    && docker-php-ext-enable igbinary redis
-
-# working directory and port
-WORKDIR /var/www/html
-EXPOSE 9000
-
-# startPHP-FPM
-CMD ["php-fpm"]
+RUN pecl install igbinary \
+	&& pecl install redis \
+	&& docker-php-ext-install mysqli \
+	&& docker-php-ext-enable redis \
+	&& echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
