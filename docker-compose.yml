@@ -34,6 +34,13 @@ services:
     networks:
       - mynetwork
 
+    myredis:
+      image: redis:latest
+      container_name: redis
+      restart: always
+      networks:
+        - mynetwork
+
   # Nginx 
   nginx:
     image: nginx:latest
