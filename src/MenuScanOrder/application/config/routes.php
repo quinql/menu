@@ -1,54 +1,41 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-/*
-| -------------------------------------------------------------------------
-| URI ROUTING
-| -------------------------------------------------------------------------
-| This file lets you re-map URI requests to specific controller functions.
-|
-| Typically there is a one-to-one relationship between a URL string
-| and its corresponding controller class/method. The segments in a
-| URL normally follow this pattern:
-|
-|	example.com/class/method/id/
-|
-| In some instances, however, you may want to remap this relationship
-| so that a different class/function is called than the one
-| corresponding to the URL.
-|
-| Please see the user guide for complete details:
-|
-|	https://codeigniter.com/user_guide/general/routing.html
-|
-| -------------------------------------------------------------------------
-| RESERVED ROUTES
-| -------------------------------------------------------------------------
-|
-| There are three reserved routes:
-|
-|	$route['default_controller'] = 'welcome';
-|
-| This route indicates which controller class should be loaded if the
-| URI contains no data. In the above example, the "welcome" class
-| would be loaded.
-|
-|	$route['404_override'] = 'errors/page_missing';
-|
-| This route will tell the Router which controller/method to use if those
-| provided in the URL cannot be matched to a valid route.
-|
-|	$route['translate_uri_dashes'] = FALSE;
-|
-| This is not exactly a route, but allows you to automatically route
-| controller and method names that contain dashes. '-' isn't a valid
-| class or method name character, so it requires translation.
-| When you set this option to TRUE, it will replace ALL dashes in the
-| controller and method URI segments.
-|
-| Examples:	my-controller/index	-> my_controller/index
-|		my-controller/my-method	-> my_controller/my_method
-*/
-$route['default_controller'] = 'welcome';
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+use CodeIgniter\Router\RouteCollection;
+
+/**
+ * @var RouteCollection $routes
+ */
+
+ //index
+$routes->get('/home', 'HomeController::index');
+$routes->get('/items', 'ItemsController::index');
+$routes->get('/menuman', 'MenumanController::index');
+$routes->get('/staffman', 'StaffmanController::index');
+$routes->get('/login', 'LoginController::index');
+$routes->get('/signup', 'SignupController::index');
+$routes->get('/logout', 'LogoutController::index');
+$routes->get('/adminlogin', 'AdminloginController::index');
+$routes->get('/vieworder', 'VieworderController::index');
+$routes->get('/orderman', 'OrdermanController::index');
+
+//add function
+$routes->post('/add_item/confirm', 'MenumanController::add_item');
+$routes->post('/add_user/confirm', 'StaffmanController::add_user');
+$routes->post('/add_order/confirm', 'OrdermanController::add_order');
+
+//delete function
+$routes->get('/delete_item/(:num)', 'MenumanController::delete_item/$1');
+$routes->get('/delete_user/(:num)', 'StaffmanController::delete_user/$1');
+$routes->get('/delete_order/(:num)', 'OrdermanController::delete_order/$1');
+
+//edit function
+$routes->post('/edit_item/confirm/(:num)', 'MenumanController::edit_item/$1');
+$routes->post('/edit_user/confirm/(:num)', 'StaffmanController::edit_user/$1');
+$routes->post('/edit_order/confirm/(:num)', 'OrdermanController::edit_order/$1');
+
+//signup function
+$routes->post('/signup/confirm', 'SignupController::signup');
+
+// login function
+$routes->post('/login/confirm', 'LoginController::login');
+$routes->post('/adminlogin/confirm', 'AdminloginController::login');
