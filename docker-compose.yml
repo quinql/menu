@@ -18,6 +18,7 @@ services:
       - mynetwork
     depends_on:
       - mysql
+      - myredis
 
   # MySQL
   mysql:
@@ -34,12 +35,13 @@ services:
     networks:
       - mynetwork
 
-    myredis:
-      image: redis:latest
-      container_name: redis
-      restart: always
-      networks:
-        - mynetwork
+  # Redis
+  myredis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    networks:
+      - mynetwork
 
   # Nginx 
   nginx:
