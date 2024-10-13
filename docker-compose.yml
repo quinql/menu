@@ -13,7 +13,7 @@ services:
     expose:
       - "9000"
     volumes:
-      - ./src:/var/www/html
+      - ./src/MenuScanOrder:/var/www/html
     networks:
       - mynetwork
     depends_on:
@@ -49,7 +49,7 @@ services:
       - "8080:80"
     volumes:
       - ./src/nginx.ini:/etc/nginx/nginx.conf
-      - ./src/:/var/www/html
+      - ./src/MenuScanOrder/:/var/www/html
     depends_on:
       - php
     networks:
